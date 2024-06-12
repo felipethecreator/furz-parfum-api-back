@@ -7,7 +7,7 @@ import (
 type Routes struct {
 	URL 			string
 	Method 			string
-	RouteFunction 	func(http.ResponseWriter, *http.Request)
+	RouteFunction 	func(http.ResponseWriter, *http.Request) // TODO
 	NeedsAuth 		bool
 }
 
