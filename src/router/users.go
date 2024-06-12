@@ -15,28 +15,14 @@ var userRoutes = []Routes{
 	{
 		URL: 				"/register",
 		Method:				http.MethodPost,
-		RouteFunction:		func(http.ResponseWriter, *http.Request) {
+		RouteFunction:		controllers.RegisterUser {
 		},
 		NeedsAuth:			false,
-	},
-	{
-		URL: 				"/register",
-		Method:				http.MethodGet,
-		RouteFunction:		func(http.ResponseWriter, *http.Request) {
-		},
-		NeedsAuth:			false,
-	},
+	},	
 	{
 		URL:				"/login",
 		Method:				http.MethodPost,
-		RouteFunction:		func(http.ResponseWriter, *http.Request) {
-		},
-		NeedsAuth:			false,
-	},
-	{
-		URL: 				"/login",
-		Method:				http.MethodGet,
-		RouteFunction:		func(http.ResponseWriter, *http.Request) {
+		RouteFunction:		controllers.LoginUser {
 		},
 		NeedsAuth:			false,
 	},
