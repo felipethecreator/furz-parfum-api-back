@@ -4,9 +4,9 @@ import (
 	"net/http"
 )
 
-func RegisterUser(http.ResponseWriter, *http.Request) {
+func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Criando o caba"))
 }
-func LoginUser(http.ResponseWriter, *http.Request) {
+func LoginUser(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Logando o caba"))
 } 

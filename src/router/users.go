@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"ps-backend-felipe-rodrigues/src/controllers"
 )
 
 type Routes struct {
