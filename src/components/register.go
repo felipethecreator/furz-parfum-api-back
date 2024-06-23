@@ -24,8 +24,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Obtém uma referência para a coleção "users" no banco de dados "mydatabase"
-	collection := database.Client.Database("mydatabase").Collection("users")
+	// Obtém uma referência para a coleção "users" no banco de dados "userdb"
+	collection := database.GetUserCollection()
 
 	// Insere o documento user na coleção "users"
 	_, err = collection.InsertOne(context.TODO(), user)
