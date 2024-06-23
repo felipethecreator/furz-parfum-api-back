@@ -1,8 +1,11 @@
 package database
 
-import "log"
+import (
+	"go.mongodb.org/mongo-driver/mongo"
+	"log"
+)
 
-func IniciarMongo() {
+func IniciarMongo() (client *mongo.Client) {
 	log.Println("Server is starting...")
 
 	// Define a URI de conexão com o MongoDB Atlas.
@@ -14,4 +17,5 @@ func IniciarMongo() {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
 	}
 	Client = client
+	return (client)
 }

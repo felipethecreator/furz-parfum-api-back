@@ -5,25 +5,34 @@ import (
 	"github.com/rs/cors"
 	"log"
 	"net/http"
-	"ps-backend-felipe-rodrigues/src/components"
 	"ps-backend-felipe-rodrigues/src/database"
+	"ps-backend-felipe-rodrigues/src/requests"
 )
 
 func main() {
-	database.IniciarMongo()
+	log.Println("Server is starting...")
 
-	// corsHandler é uma variável que guarda o middleware padrão do CORS
-	// Este middleware adiciona cabeçalhos HTTP necessários para permitir requisições de diferentes origens
+	// Define a URI de conexão com o MongoDB Atlas
+	uri := "mongodb+srv://felipe:1234@furz-parfum.jwzwsza.mongodb.net/mydatabase?retryWrites=true&w=majority&ssl=true"
+
+	// Chama a função ConectarMongo passando a URI e captura o cliente MongoDB e qualquer erro retornado
+	client, err := database.ConectarMongo(uri)
+	if err != nil {
+		log.Fatalf("Failed to connect to MongoDB: %v", err)
+	}
+
+	// Define o cliente MongoDB globalmente
+	database.Client = client
+
+	// Middleware CORS
 	corsHandler := cors.Default().Handler
 
-	// Configura a rota para registro de usuários
-	http.HandleFunc("/register", components.RegisterUser)
+	// Configura a rota para registro de usuários usando a função RegisterUserHandler
+	http.HandleFunc("/register", requests.RegisterUserHandler)
 
-	log.Println("Servidor iniciado na porta 5173")
-
-	// http.DefaultServeMux é o roteador HTTP padrão que encaminha requisições para os handlers registrados, como o RegisterUser
-	go log.Fatal(http.ListenAndServe(":5173", corsHandler(http.DefaultServeMux)))
-
+	// Inicia o servidor HTTP na porta 5173
+	log.Println("Servidor iniciado na porta 8080")
+	log.Fatal(http.ListenAndServe(":8080", corsHandler(http.DefaultServeMux)))
 }
 
 /*user := components.User{
