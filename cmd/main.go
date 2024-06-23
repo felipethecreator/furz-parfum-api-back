@@ -13,18 +13,16 @@ import (
 func main() {
 	fmt.Println("Server is starting...")
 
-	// String de conexão do MongoDB
+	// Define a URI de conexão com o MongoDB Atlas
 	uri := "mongodb+srv://felipe:1234@furz-parfum.jwzwsza.mongodb.net/mydatabase?retryWrites=true&w=majority&ssl=true"
 
-	// Conectar ao MongoDB
+	// Chama a função ConectarMongo passando a URI e captura o cliente MongoDB e qualquer erro retornado
 	_, err := database.ConectarMongo(uri)
 	if err != nil {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
 	}
 
-	// Gerar as rotas do servidor
 	r := router.Gerar()
 
-	// Iniciar o servidor HTTP
 	log.Fatal(http.ListenAndServe(":5173", r))
 }
