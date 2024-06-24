@@ -1,8 +1,8 @@
 package main
 
 import (
-	//pacote CORS -> permite requisições de diferentes origens (ajuda na implementação do frontend)
 	"github.com/rs/cors"
+	//pacote CORS -> permite requisições de diferentes origens (ajuda na implementação do frontend)
 	"log"
 	"net/http"
 	"ps-backend-felipe-rodrigues/src/database"
@@ -29,6 +29,8 @@ func main() {
 
 	// Configura a rota para registro de usuários usando a função RegisterUserHandler
 	http.HandleFunc("/register", requests.RegisterUserHandler)
+	// Configura a rota para login de usuários usando a função LoginUserHandler
+	http.HandleFunc("/login", requests.LoginUserHandler)
 
 	// Inicia o servidor HTTP na porta 5173
 	log.Println("Servidor iniciado na porta 8080")
