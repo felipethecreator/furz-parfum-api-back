@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -34,5 +33,6 @@ func ConectarMongo(uri string) (*mongo.Client, error) {
 // GetUserCollection é uma função que retorna uma referência para a coleção "user_profiles"
 // no banco de dados "users" usando o cliente MongoDB global.
 func GetUserCollection() *mongo.Collection {
-	return Client.Database("UsersDB").Collection("User")
+	// Acessa o banco de dados "users" e retorna a coleção "user_profiles".
+	return Client.Database("users").Collection("user_profiles")
 }
