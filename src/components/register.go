@@ -3,14 +3,14 @@ package components
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"ps-backend-felipe-rodrigues/src/database"
+	"ps-backend-Matheus-Musashi/src/database"
 )
 
 type User struct {
-	Name        string `json:"name" bson:"name"`
-	DisplayName string `json:"displayname" bson:"displayname"`
-	Password    string `json:"password" bson:"password"`
+	Username string `json:"username" bson:"username"`
+	Password string `json:"password" bson:"password"`
 }
 
 // função HTTP handler que lida com requisições de registro de usuários
@@ -23,7 +23,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
-
+	fmt.Printf("Decoded user: %+v\n", user)
 	// Obtém uma referência para a coleção "users" no banco de dados "userdb"
 	collection := database.GetUserCollection()
 

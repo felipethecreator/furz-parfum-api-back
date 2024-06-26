@@ -3,10 +3,11 @@ package components
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"ps-backend-Matheus-Musashi/src/database"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"net/http"
-	"ps-backend-felipe-rodrigues/src/database"
 )
 
 // função HTTP handler que lida com requisições de login de usuários
@@ -25,7 +26,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	collection := database.GetUserCollection()
 
 	// Busca o usuário no banco de dados pelo DisplayName e Password
-	filter := bson.M{"displayname": user.DisplayName, "password": user.Password}
+	filter := bson.M{"name": user.Username, "password": user.Password}
 	err = collection.FindOne(context.TODO(), filter).Decode(&foundUser)
 	if err == mongo.ErrNoDocuments {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
