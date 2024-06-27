@@ -1,11 +1,12 @@
 package router
 
 import (
+	"net/http"
+	"ps-backend-Matheus-Musashi/src/components"
+	"ps-backend-Matheus-Musashi/src/database"
+
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
-	"net/http"
-	"ps-backend-felipe-rodrigues/src/components"
-	"ps-backend-felipe-rodrigues/src/database"
 )
 
 func Gerar() *mux.Router {
