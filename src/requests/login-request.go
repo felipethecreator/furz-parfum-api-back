@@ -1,41 +1,69 @@
 package requests
 
 import (
-	"context"
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"ps-backend-Matheus-Musashi/src/database"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"net/http/httptest"
+	"ps-backend-felipe-rodrigues/src/components"
 )
 
+// Função para lidar com requisições de login de usuários
 func LoginUserHandler(w http.ResponseWriter, r *http.Request) {
-	var user User
-	var foundUser User
+	var user components.User
 
-	// Decode the JSON request body and store it in the user variable
+	// Decodifica o corpo da requisição JSON e armazena os dados na variável user
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{Message: "Invalid request payload"})
 		return
 	}
 
-	// Get a reference to the "users" collection
-	collection := database.GetUserCollection()
-
-	// Search for the user in the database by username and password
-	filter := bson.M{"username": user.Username, "password": user.Password}
-	err = collection.FindOne(context.TODO(), filter).Decode(&foundUser)
-	if err == mongo.ErrNoDocuments {
-		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
-		return
-	} else if err != nil {
-		http.Error(w, "Failed to login user", http.StatusInternalServerError)
+	// Chama a função LoginUsuario para processar o login do usuário
+	err = LoginUsuario(user)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(ErrorResponse{Message: err.Error()})
 		return
 	}
 
-	// Set the HTTP status as 200 (OK) and return the found user as JSON
+	// Define o status HTTP como 200 (OK) e retorna o usuário logado como JSON
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(foundUser)
+	json.NewEncoder(w).Encode(user)
+}
+
+// Função para simular uma requisição de login de usuário
+func LoginUsuario(user components.User) error {
+	// Converte o objeto User em JSON.
+	body, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
+
+	// Cria uma requisição HTTP POST simulada com os dados do usuário.
+	req, err := http.NewRequest("POST", "/login", bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
+
+	// Define o cabeçalho Content-Type como application/json.
+	req.Header.Set("Content-Type", "application/json")
+
+	// Cria um ResponseRecorder para capturar a resposta da requisição.
+	rr := httptest.NewRecorder()
+
+	// Define o handler de login de usuário.
+	handler := http.HandlerFunc(components.LoginUser)
+
+	// Chama o handler de login de usuário com a requisição simulada.
+	handler.ServeHTTP(rr, req)
+
+	// Verifica o status code
+	if status := rr.Code; status != http.StatusOK {
+		return fmt.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	return nil
 }
